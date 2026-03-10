@@ -91,21 +91,30 @@ function createSaveButton(postEl) {
 // 3) Chrome Storage'a kaydet
 // -----------------------------------------------
 async function savePost(postData) {
+  // Extension güncellendiyse context geçersiz olabilir
+  if (!chrome.runtime?.id) {
+    showToast("⚠️ Sayfayı yenile (F5) ve tekrar dene");
+    return;
+  }
+
   return new Promise((resolve) => {
-    chrome.storage.local.get(["posts"], (result) => {
-      const posts = result.posts || [];
+    try {
+      chrome.storage.local.get(["posts"], (result) => {
+        if (chrome.runtime.lastError) { resolve(); return; }
 
-      // Aynı post zaten kayıtlıysa ekleme
-      const alreadyExists = posts.some((p) => p.id === postData.id);
-      if (!alreadyExists) {
-        posts.unshift(postData); // En yeniler başa
-      }
+        const posts = result.posts || [];
+        const alreadyExists = posts.some((p) => p.id === postData.id);
+        if (!alreadyExists) {
+          posts.unshift(postData);
+        }
 
-      // Ücretsiz plan limiti: 20 post
-      const LIMITED_POSTS = posts.slice(0, 20);
-
-      chrome.storage.local.set({ posts: LIMITED_POSTS }, resolve);
-    });
+        const LIMITED_POSTS = posts.slice(0, 20);
+        chrome.storage.local.set({ posts: LIMITED_POSTS }, resolve);
+      });
+    } catch (e) {
+      showToast("⚠️ Sayfayı yenile (F5) ve tekrar dene");
+      resolve();
+    }
   });
 }
 
