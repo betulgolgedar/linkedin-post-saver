@@ -1,0 +1,63 @@
+/* =============================================
+   LinkedIn Post Saver - content.css
+   Sayfaya inject edilen stiller
+   ============================================= */
+
+.lps-save-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px;
+  background: transparent;
+  border: 1.5px solid #0077B5;
+  border-radius: 20px;
+  color: #0077B5;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-left: 8px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  white-space: nowrap;
+}
+
+.lps-save-btn:hover {
+  background: rgba(0, 119, 181, 0.08);
+  transform: scale(1.02);
+}
+
+.lps-save-btn.lps-saved {
+  border-color: #057642;
+  color: #057642;
+  cursor: default;
+}
+
+.lps-save-btn svg {
+  flex-shrink: 0;
+  transition: fill 0.2s;
+}
+
+/* Toast bildirimi */
+.lps-toast {
+  position: fixed;
+  bottom: 32px;
+  right: 32px;
+  background: #1A1A2E;
+  color: #fff;
+  padding: 12px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  border-left: 3px solid #00D4FF;
+  z-index: 99999;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: all 0.25s ease;
+  pointer-events: none;
+}
+
+.lps-toast-show {
+  opacity: 1;
+  transform: translateY(0);
+}
