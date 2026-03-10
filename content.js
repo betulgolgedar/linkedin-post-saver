@@ -184,8 +184,11 @@ function injectButtons() {
 //    LinkedIn dinamik yüklüyor, her yeni post
 //    geldiğinde butonları yeniden inject et
 // -----------------------------------------------
+// Debounce: art arda gelen DOM değişikliklerini 500ms bekleyip tek seferde işle
+let debounceTimer = null;
 const observer = new MutationObserver(() => {
-  injectButtons();
+  clearTimeout(debounceTimer);
+  debounceTimer = setTimeout(injectButtons, 500);
 });
 
 observer.observe(document.body, {
