@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   document.getElementById("clear-btn").addEventListener("click", clearAll);
   document.getElementById("upgrade-btn").addEventListener("click", () => {
-    chrome.tabs.create({ url: "https://yoursite.com/upgrade" });
+    chrome.tabs.create({ url: "https://betulgolgedar.github.io/linkedin-post-saver/" });
   });
 });
 
