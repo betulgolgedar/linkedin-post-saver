@@ -11,7 +11,7 @@ LinkedIn akışındaki postları tek tıkla kaydet, etiketle ve organize et.
 
 ## Kurulum
 
-Chrome Web Store'dan indirin *(yakında)* veya [web sitemizi ziyaret edin](https://betulaltun.github.io/linkedin-post-saver/).
+Chrome Web Store'dan indirin *(yakında)* veya [web sitemizi ziyaret edin](https://betulgolgedar.github.io/linkedin-post-saver/).
 
 ## Lisans
 
