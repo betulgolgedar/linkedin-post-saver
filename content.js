@@ -165,6 +165,7 @@ function injectButtons() {
 
     // Daha önce kaydedilmişse işaretle
     const componentKey = postEl.getAttribute("componentkey") || "";
+    if (!isContextValid()) return;
     chrome.storage.local.get(["posts"], (result) => {
       const savedPosts = result.posts || [];
       if (savedPosts.some((p) => p.id === componentKey)) {
@@ -191,6 +192,7 @@ function injectButtons() {
 // Debounce: art arda gelen DOM değişikliklerini 500ms bekleyip tek seferde işle
 let debounceTimer = null;
 const observer = new MutationObserver(() => {
+  if (!isContextValid()) { observer.disconnect(); return; }
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(injectButtons, 500);
 });
