@@ -3,105 +3,191 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LinkedIn Post Saver — Premium</title>
+  <title>LinkedIn Post Saver — LinkedIn'deki en iyi postları kaybetme</title>
+  <meta name="description" content="LinkedIn akışındaki postları tek tıkla kaydet, etiketle ve organize et. Chrome extension.">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
       --blue: #0077B5;
+      --blue-light: #0A8FD8;
       --cyan: #00D4FF;
       --purple: #A78BFA;
-      --bg: #0A0A0F;
-      --card: #111118;
-      --border: #1A1A2E;
-      --text: #E2E8F0;
-      --muted: #64748B;
+      --green: #22C55E;
+      --bg: #08080E;
+      --bg2: #0D0D18;
+      --card: #111120;
+      --card2: #16162A;
+      --border: #1E1E35;
+      --border2: #252545;
+      --text: #E8EAF0;
+      --muted: #6B7280;
+      --muted2: #9CA3AF;
     }
+
+    html { scroll-behavior: smooth; }
 
     body {
       background: var(--bg);
       color: var(--text);
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
       min-height: 100vh;
+      overflow-x: hidden;
     }
 
-    /* NAV */
+    /* ── NAV ── */
     nav {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 18px 40px;
+      padding: 16px 48px;
       border-bottom: 1px solid var(--border);
       position: sticky;
       top: 0;
-      background: rgba(10,10,15,0.92);
-      backdrop-filter: blur(12px);
-      z-index: 100;
+      background: rgba(8,8,14,0.88);
+      backdrop-filter: blur(16px);
+      z-index: 200;
     }
 
     .logo {
       display: flex;
       align-items: center;
       gap: 10px;
-      font-weight: 700;
-      font-size: 16px;
+      font-weight: 800;
+      font-size: 15px;
+      letter-spacing: -0.01em;
     }
 
     .logo-icon {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       background: linear-gradient(135deg, var(--blue), var(--cyan));
-      border-radius: 8px;
+      border-radius: 9px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 16px;
+      font-size: 17px;
+      box-shadow: 0 0 16px rgba(0,212,255,0.25);
     }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--muted2);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--text); }
 
     .nav-cta {
       background: linear-gradient(135deg, var(--blue), var(--cyan));
       color: #fff;
       border: none;
-      padding: 10px 22px;
+      padding: 9px 22px;
       border-radius: 8px;
       font-size: 14px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       text-decoration: none;
-      transition: opacity 0.2s;
+      transition: opacity 0.2s, box-shadow 0.2s;
+      box-shadow: 0 0 20px rgba(0,119,181,0.3);
     }
 
-    .nav-cta:hover { opacity: 0.88; }
+    .nav-cta:hover { opacity: 0.88; box-shadow: 0 0 28px rgba(0,119,181,0.5); }
 
-    /* HERO */
+    /* ── HERO ── */
+    .hero-wrap {
+      position: relative;
+      overflow: hidden;
+    }
+
+    /* Gradient orbs */
+    .hero-wrap::before {
+      content: '';
+      position: absolute;
+      top: -200px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 800px;
+      height: 600px;
+      background: radial-gradient(ellipse, rgba(0,119,181,0.15) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .hero-wrap::after {
+      content: '';
+      position: absolute;
+      top: 100px;
+      right: -200px;
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(ellipse, rgba(167,139,250,0.08) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
     .hero {
       text-align: center;
-      padding: 100px 24px 80px;
-      max-width: 720px;
+      padding: 96px 24px 48px;
+      max-width: 780px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
 
     .hero-badge {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      background: rgba(167,139,250,0.1);
-      border: 1px solid rgba(167,139,250,0.3);
-      color: var(--purple);
+      gap: 8px;
+      background: rgba(0,212,255,0.08);
+      border: 1px solid rgba(0,212,255,0.2);
+      color: var(--cyan);
       font-size: 12px;
-      font-weight: 600;
-      padding: 6px 14px;
+      font-weight: 700;
+      padding: 6px 16px;
       border-radius: 99px;
-      margin-bottom: 28px;
-      letter-spacing: 0.04em;
+      margin-bottom: 32px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+
+    .hero-badge .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--cyan);
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
     }
 
     .hero h1 {
-      font-size: clamp(32px, 6vw, 56px);
-      font-weight: 800;
-      line-height: 1.15;
-      margin-bottom: 20px;
-      background: linear-gradient(135deg, #fff 40%, var(--cyan));
+      font-size: clamp(34px, 6.5vw, 62px);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 24px;
+      letter-spacing: -0.03em;
+    }
+
+    .hero h1 .gradient {
+      background: linear-gradient(135deg, #fff 20%, var(--cyan) 80%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero h1 .blue {
+      background: linear-gradient(135deg, var(--blue-light), var(--cyan));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
@@ -109,38 +195,47 @@
 
     .hero p {
       font-size: 18px;
-      color: var(--muted);
-      line-height: 1.7;
-      margin-bottom: 40px;
+      color: var(--muted2);
+      line-height: 1.75;
+      margin-bottom: 44px;
+      max-width: 560px;
+      margin-left: auto;
+      margin-right: auto;
     }
 
     .hero-btns {
       display: flex;
-      gap: 12px;
+      gap: 14px;
       justify-content: center;
       flex-wrap: wrap;
+      margin-bottom: 20px;
     }
 
     .btn-primary {
       background: linear-gradient(135deg, var(--blue), var(--cyan));
       color: #fff;
       border: none;
-      padding: 14px 32px;
+      padding: 15px 34px;
       border-radius: 10px;
       font-size: 15px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       text-decoration: none;
-      transition: opacity 0.2s, transform 0.2s;
+      transition: all 0.2s;
+      box-shadow: 0 4px 24px rgba(0,119,181,0.35);
+      letter-spacing: -0.01em;
     }
 
-    .btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 32px rgba(0,119,181,0.5);
+    }
 
     .btn-secondary {
-      background: transparent;
-      color: var(--muted);
-      border: 1px solid var(--border);
-      padding: 14px 32px;
+      background: rgba(255,255,255,0.04);
+      color: var(--muted2);
+      border: 1px solid var(--border2);
+      padding: 15px 34px;
       border-radius: 10px;
       font-size: 15px;
       font-weight: 600;
@@ -149,133 +244,485 @@
       transition: all 0.2s;
     }
 
-    .btn-secondary:hover { border-color: var(--blue); color: var(--text); }
-
-    /* FEATURES */
-    .section {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 80px 24px;
+    .btn-secondary:hover {
+      border-color: var(--blue);
+      color: var(--text);
+      background: rgba(0,119,181,0.06);
     }
 
-    .section-label {
-      text-align: center;
+    .hero-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+
+    /* ── BROWSER MOCKUP ── */
+    .mockup-wrap {
+      max-width: 860px;
+      margin: 48px auto 0;
+      padding: 0 24px 80px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .browser {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      overflow: hidden;
+      box-shadow: 0 24px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.03);
+    }
+
+    .browser-bar {
+      background: var(--card2);
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .browser-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .browser-dots span {
+      width: 11px;
+      height: 11px;
+      border-radius: 50%;
+    }
+
+    .browser-dots .d1 { background: #FF5F57; }
+    .browser-dots .d2 { background: #FEBC2E; }
+    .browser-dots .d3 { background: #28C840; }
+
+    .browser-url {
+      flex: 1;
+      background: rgba(255,255,255,0.05);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 5px 14px;
+      font-size: 12px;
+      color: var(--muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .browser-url .lock { color: var(--green); font-size: 10px; }
+
+    .browser-content {
+      padding: 24px;
+      background: #0F0F1A;
+    }
+
+    /* Fake LinkedIn post */
+    .fake-post {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .fake-post-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    .fake-avatar {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+    }
+
+    .fake-author-name {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 2px;
+    }
+
+    .fake-author-title {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .fake-post-text {
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.65;
+      margin-bottom: 16px;
+    }
+
+    .fake-post-text strong {
+      color: var(--text);
+    }
+
+    .fake-actions {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    .fake-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 6px 12px;
+      border-radius: 99px;
+      font-size: 12px;
+      color: var(--muted2);
+      border: 1px solid var(--border);
+      background: transparent;
+      cursor: pointer;
+    }
+
+    .fake-save-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      border-radius: 99px;
       font-size: 12px;
       font-weight: 700;
-      color: var(--cyan);
-      letter-spacing: 0.1em;
-      text-transform: uppercase;
+      color: var(--blue-light);
+      border: 1.5px solid var(--blue-light);
+      background: transparent;
+      cursor: pointer;
+      box-shadow: 0 0 12px rgba(0,119,181,0.2);
+      animation: glow-btn 3s infinite;
+      margin-left: auto;
+    }
+
+    @keyframes glow-btn {
+      0%, 100% { box-shadow: 0 0 8px rgba(0,119,181,0.2); }
+      50% { box-shadow: 0 0 18px rgba(0,119,181,0.5); }
+    }
+
+    /* Popup overlay on mockup */
+    .popup-overlay {
+      background: var(--card);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      padding: 16px;
+      max-width: 300px;
+      margin-left: auto;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+      position: relative;
+    }
+
+    .popup-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .popup-post-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      background: var(--card2);
+      border-radius: 8px;
+      margin-bottom: 6px;
+    }
+
+    .popup-post-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--cyan);
+      flex-shrink: 0;
+    }
+
+    .popup-post-text {
+      font-size: 11px;
+      color: var(--muted2);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .popup-tag {
+      font-size: 10px;
+      background: rgba(0,119,181,0.15);
+      color: var(--blue-light);
+      padding: 2px 8px;
+      border-radius: 99px;
+      margin-left: auto;
+      flex-shrink: 0;
+    }
+
+    /* ── STATS ── */
+    .stats-bar {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      background: var(--bg2);
+      padding: 32px 24px;
+    }
+
+    .stats-inner {
+      max-width: 860px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: 64px;
+      flex-wrap: wrap;
+    }
+
+    .stat-item {
+      text-align: center;
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      background: linear-gradient(135deg, #fff, var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .stat-label {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .section {
+      max-width: 1040px;
+      margin: 0 auto;
+      padding: 88px 24px;
+    }
+
+    .section-tag {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
       margin-bottom: 12px;
+    }
+
+    .section-tag span {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--cyan);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .section-tag::before,
+    .section-tag::after {
+      content: '';
+      flex: 1;
+      max-width: 60px;
+      height: 1px;
+      background: linear-gradient(to right, transparent, var(--border2));
+    }
+
+    .section-tag::after {
+      background: linear-gradient(to left, transparent, var(--border2));
     }
 
     .section h2 {
       text-align: center;
-      font-size: clamp(24px, 4vw, 36px);
-      font-weight: 800;
-      margin-bottom: 56px;
+      font-size: clamp(22px, 4vw, 36px);
+      font-weight: 900;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
     }
 
-    .features-grid {
+    .section-sub {
+      text-align: center;
+      font-size: 15px;
+      color: var(--muted2);
+      margin-bottom: 60px;
+      max-width: 480px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* Steps */
+    .steps {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 20px;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 4px;
+      position: relative;
     }
 
-    .feature-card {
+    .step-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 28px;
-      transition: border-color 0.2s;
+      border-radius: 16px;
+      padding: 32px 28px;
+      position: relative;
+      transition: border-color 0.3s, transform 0.2s;
     }
 
-    .feature-card:hover { border-color: #2A2A4E; }
+    .step-card:hover {
+      border-color: var(--border2);
+      transform: translateY(-3px);
+    }
 
-    .feature-icon {
-      width: 44px;
-      height: 44px;
+    .step-num {
+      width: 36px;
+      height: 36px;
+      background: linear-gradient(135deg, var(--blue), var(--cyan));
       border-radius: 10px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      margin-bottom: 16px;
+      font-size: 14px;
+      font-weight: 900;
+      color: #fff;
+      margin-bottom: 20px;
+      box-shadow: 0 0 16px rgba(0,119,181,0.4);
+    }
+
+    .step-card h3 {
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 10px;
+      letter-spacing: -0.01em;
+    }
+
+    .step-card p {
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.65;
+    }
+
+    /* ── FEATURES ── */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      background: var(--border);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+    }
+
+    @media (max-width: 700px) {
+      .features-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 480px) {
+      .features-grid { grid-template-columns: 1fr; }
+    }
+
+    .feature-card {
+      background: var(--card);
+      padding: 28px 24px;
+      transition: background 0.2s;
+    }
+
+    .feature-card:hover { background: var(--card2); }
+
+    .feature-icon {
+      font-size: 24px;
+      margin-bottom: 14px;
+      display: block;
     }
 
     .feature-card h3 {
-      font-size: 15px;
-      font-weight: 700;
+      font-size: 14px;
+      font-weight: 800;
       margin-bottom: 8px;
+      letter-spacing: -0.01em;
     }
 
     .feature-card p {
-      font-size: 13px;
-      color: var(--muted);
+      font-size: 12px;
+      color: var(--muted2);
       line-height: 1.6;
     }
 
-    /* PRICING */
+    /* ── PRICING ── */
     .pricing-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 24px;
-      max-width: 680px;
+      max-width: 700px;
       margin: 0 auto;
     }
 
     .pricing-card {
       background: var(--card);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 32px;
+      border-radius: 20px;
+      padding: 36px 32px;
       position: relative;
+      transition: transform 0.2s;
     }
 
+    .pricing-card:hover { transform: translateY(-4px); }
+
     .pricing-card.featured {
-      border-color: var(--cyan);
-      background: linear-gradient(135deg, rgba(0,119,181,0.06), rgba(0,212,255,0.04));
+      border-color: rgba(0,119,181,0.5);
+      background: linear-gradient(160deg, rgba(0,119,181,0.07) 0%, rgba(0,212,255,0.04) 100%);
+      box-shadow: 0 0 40px rgba(0,119,181,0.12);
     }
 
     .popular-badge {
       position: absolute;
-      top: -12px;
+      top: -13px;
       left: 50%;
       transform: translateX(-50%);
       background: linear-gradient(135deg, var(--blue), var(--cyan));
       color: #fff;
       font-size: 11px;
-      font-weight: 700;
-      padding: 4px 14px;
+      font-weight: 800;
+      padding: 5px 16px;
       border-radius: 99px;
       white-space: nowrap;
+      letter-spacing: 0.04em;
+      box-shadow: 0 4px 12px rgba(0,119,181,0.4);
     }
 
     .plan-name {
-      font-size: 13px;
-      font-weight: 700;
+      font-size: 12px;
+      font-weight: 800;
       color: var(--muted);
       text-transform: uppercase;
-      letter-spacing: 0.06em;
-      margin-bottom: 12px;
+      letter-spacing: 0.1em;
+      margin-bottom: 16px;
     }
 
     .plan-price {
-      font-size: 42px;
-      font-weight: 800;
-      margin-bottom: 4px;
+      font-size: 46px;
+      font-weight: 900;
       line-height: 1;
+      margin-bottom: 6px;
+      letter-spacing: -0.03em;
     }
 
-    .plan-price span {
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--muted);
-    }
+    .plan-price .currency { font-size: 24px; vertical-align: super; font-weight: 700; }
+    .plan-price .period { font-size: 14px; font-weight: 500; color: var(--muted); letter-spacing: 0; }
 
     .plan-desc {
       font-size: 13px;
-      color: var(--muted);
-      margin-bottom: 24px;
+      color: var(--muted2);
+      margin-bottom: 28px;
       padding-bottom: 24px;
       border-bottom: 1px solid var(--border);
     }
@@ -284,8 +731,8 @@
       list-style: none;
       display: flex;
       flex-direction: column;
-      gap: 12px;
-      margin-bottom: 28px;
+      gap: 13px;
+      margin-bottom: 32px;
     }
 
     .plan-features li {
@@ -295,88 +742,239 @@
       gap: 10px;
     }
 
-    .plan-features li .check {
-      color: #22C55E;
-      font-size: 14px;
-      flex-shrink: 0;
-    }
-
-    .plan-features li .cross {
-      color: #444;
-      flex-shrink: 0;
-    }
-
-    .plan-features li.disabled {
-      color: #444;
-    }
+    .check { color: var(--green); font-weight: 700; flex-shrink: 0; }
+    .cross { color: #333; flex-shrink: 0; }
+    .plan-features li.dim { color: #444; }
 
     .plan-btn {
       width: 100%;
-      padding: 12px;
+      padding: 14px;
       border-radius: 10px;
       font-size: 14px;
-      font-weight: 700;
+      font-weight: 800;
       cursor: pointer;
       border: none;
-      transition: all 0.2s;
       text-decoration: none;
       display: block;
       text-align: center;
+      transition: all 0.2s;
+      letter-spacing: -0.01em;
     }
 
     .plan-btn.free {
-      background: var(--border);
-      color: var(--muted);
+      background: rgba(255,255,255,0.05);
+      color: var(--muted2);
+      border: 1px solid var(--border2);
     }
 
-    .plan-btn.free:hover { background: #222; color: var(--text); }
+    .plan-btn.free:hover { background: rgba(255,255,255,0.09); color: var(--text); }
 
     .plan-btn.premium {
       background: linear-gradient(135deg, var(--blue), var(--cyan));
       color: #fff;
+      box-shadow: 0 4px 20px rgba(0,119,181,0.4);
     }
 
-    .plan-btn.premium:hover { opacity: 0.9; }
+    .plan-btn.premium:hover {
+      box-shadow: 0 6px 28px rgba(0,119,181,0.6);
+      transform: translateY(-1px);
+    }
 
-    /* FAQ */
+    /* ── TESTIMONIALS ── */
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
+    }
+
+    .testimonial-card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 24px;
+      transition: border-color 0.2s;
+    }
+
+    .testimonial-card:hover { border-color: var(--border2); }
+
+    .testimonial-stars {
+      color: #FBBF24;
+      font-size: 13px;
+      margin-bottom: 12px;
+      letter-spacing: 2px;
+    }
+
+    .testimonial-text {
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.7;
+      margin-bottom: 16px;
+      font-style: italic;
+    }
+
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .t-avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .t-name {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .t-role {
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    /* ── FAQ ── */
     .faq-list {
-      max-width: 640px;
+      max-width: 660px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
     }
 
     .faq-item {
       background: var(--card);
       border: 1px solid var(--border);
       border-radius: 12px;
-      padding: 20px 24px;
+      overflow: hidden;
     }
 
-    .faq-item h4 {
+    .faq-q {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 22px;
       font-size: 14px;
-      font-weight: 600;
-      margin-bottom: 8px;
+      font-weight: 700;
+      cursor: pointer;
+      user-select: none;
+      gap: 12px;
     }
 
-    .faq-item p {
-      font-size: 13px;
+    .faq-q:hover { color: var(--cyan); }
+
+    .faq-arrow {
+      font-size: 12px;
       color: var(--muted);
-      line-height: 1.6;
+      flex-shrink: 0;
+      transition: transform 0.2s;
     }
 
-    /* FOOTER */
+    .faq-item.open .faq-arrow { transform: rotate(180deg); color: var(--cyan); }
+
+    .faq-a {
+      display: none;
+      padding: 0 22px 18px;
+      font-size: 13px;
+      color: var(--muted2);
+      line-height: 1.7;
+      border-top: 1px solid var(--border);
+      padding-top: 14px;
+    }
+
+    .faq-item.open .faq-a { display: block; }
+
+    /* ── CTA BAND ── */
+    .cta-band {
+      margin: 0 24px 80px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(0,119,181,0.12), rgba(0,212,255,0.06));
+      border: 1px solid rgba(0,119,181,0.3);
+      padding: 64px 32px;
+      text-align: center;
+      max-width: 820px;
+      margin-left: auto;
+      margin-right: auto;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-band::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(ellipse at center top, rgba(0,212,255,0.06) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .cta-band h2 {
+      font-size: clamp(22px, 4vw, 36px);
+      font-weight: 900;
+      margin-bottom: 14px;
+      letter-spacing: -0.02em;
+    }
+
+    .cta-band p {
+      font-size: 15px;
+      color: var(--muted2);
+      margin-bottom: 36px;
+      max-width: 440px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* ── FOOTER ── */
     footer {
       border-top: 1px solid var(--border);
-      padding: 32px 40px;
-      text-align: center;
+      padding: 32px 48px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      color: var(--muted2);
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 24px;
+    }
+
+    .footer-links a {
+      color: var(--muted);
+      text-decoration: none;
       font-size: 13px;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--text); }
+
+    .footer-copy {
+      font-size: 12px;
       color: var(--muted);
     }
 
-    footer a { color: var(--muted); text-decoration: none; }
-    footer a:hover { color: var(--text); }
+    @media (max-width: 640px) {
+      nav { padding: 14px 20px; }
+      .nav-links { display: none; }
+      footer { padding: 24px 20px; flex-direction: column; align-items: flex-start; }
+      .steps { grid-template-columns: 1fr; }
+    }
   </style>
 </head>
 <body>
@@ -387,88 +985,215 @@
       <div class="logo-icon">🔖</div>
       LinkedIn Post Saver
     </div>
+    <ul class="nav-links">
+      <li><a href="#how">Nasıl Çalışır</a></li>
+      <li><a href="#features">Özellikler</a></li>
+      <li><a href="#pricing">Fiyatlar</a></li>
+      <li><a href="#faq">SSS</a></li>
+    </ul>
     <a href="#pricing" class="nav-cta">Premium'a Geç</a>
   </nav>
 
   <!-- HERO -->
-  <section class="hero">
-    <div class="hero-badge">✨ Chrome Extension</div>
-    <h1>LinkedIn'deki en iyi postları kaybetme</h1>
-    <p>
-      Akışında geçip giden ilham verici postları tek tıkla kaydet,
-      etiketle ve istediğin zaman bul.
-    </p>
-    <div class="hero-btns">
-      <a href="#pricing" class="btn-primary">Şimdi Başla — Ücretsiz</a>
-      <a href="#features" class="btn-secondary">Özellikleri Gör</a>
+  <div class="hero-wrap">
+    <section class="hero">
+      <div class="hero-badge">
+        <span class="dot"></span>
+        Chrome Extension — Ücretsiz Başla
+      </div>
+      <h1>
+        <span class="gradient">LinkedIn'deki en iyi postları</span><br>
+        <span class="blue">bir daha kaybetme</span>
+      </h1>
+      <p>
+        Akışında geçip giden ilham verici, öğretici, ilginç postları
+        tek tıkla kaydet. Etiketle, ara, istediğin zaman geri dön.
+      </p>
+      <div class="hero-btns">
+        <a href="https://chromewebstore.google.com" class="btn-primary">Chrome'a Ücretsiz Ekle</a>
+        <a href="#how" class="btn-secondary">Nasıl çalışır?</a>
+      </div>
+      <p class="hero-note">Kurulum 30 saniye · Kredi kartı gerekmez</p>
+    </section>
+
+    <!-- BROWSER MOCKUP -->
+    <div class="mockup-wrap">
+      <div class="browser">
+        <div class="browser-bar">
+          <div class="browser-dots">
+            <span class="d1"></span>
+            <span class="d2"></span>
+            <span class="d3"></span>
+          </div>
+          <div class="browser-url">
+            <span class="lock">🔒</span>
+            linkedin.com/feed
+          </div>
+        </div>
+        <div class="browser-content">
+          <!-- Fake LinkedIn Post -->
+          <div class="fake-post">
+            <div class="fake-post-header">
+              <div class="fake-avatar">👩‍💼</div>
+              <div>
+                <div class="fake-author-name">Ayşe Kaya</div>
+                <div class="fake-author-title">Senior Product Manager · 3. derece bağlantı</div>
+              </div>
+            </div>
+            <div class="fake-post-text">
+              <strong>5 yılda öğrendiğim en değerli ders:</strong> Hızlı karar vermek yavaş karar vermekten çok daha pahalıya patlar. Ama hiç karar vermemek hepsinden pahalı. Çünkü belirsizlik ekibi felç eder.<br><br>
+              Şimdi kendi kendinize sorun: Geçen hafta ertelediğiniz kaç karar var?
+            </div>
+            <div class="fake-actions">
+              <div class="fake-action-btn">👍 Beğen</div>
+              <div class="fake-action-btn">💬 Yorum</div>
+              <div class="fake-action-btn">🔄 Paylaş</div>
+              <div class="fake-action-btn">📤 Gönder</div>
+              <div class="fake-save-btn">🔖 Kaydet</div>
+            </div>
+          </div>
+
+          <!-- Popup -->
+          <div class="popup-overlay">
+            <div class="popup-title">🔖 Kaydedilen Postlar <span style="color:var(--muted);font-weight:400;font-size:11px;margin-left:auto">3 / 20</span></div>
+            <div class="popup-post-item">
+              <div class="popup-post-dot"></div>
+              <div class="popup-post-text">Ayşe Kaya — 5 yılda öğrendiğim en değerli ders…</div>
+              <div class="popup-tag">liderlik</div>
+            </div>
+            <div class="popup-post-item">
+              <div class="popup-post-dot" style="background:var(--purple)"></div>
+              <div class="popup-post-text">Mehmet Yılmaz — Startup kurmak isteyenlere…</div>
+              <div class="popup-tag">startup</div>
+            </div>
+            <div class="popup-post-item">
+              <div class="popup-post-dot" style="background:var(--green)"></div>
+              <div class="popup-post-text">Zeynep Arslan — Remote çalışırken üretken kalmanın…</div>
+              <div class="popup-tag">verimlilik</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- STATS -->
+  <div class="stats-bar">
+    <div class="stats-inner">
+      <div class="stat-item">
+        <div class="stat-number">30 sn</div>
+        <div class="stat-label">Kurulum süresi</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">1 tık</div>
+        <div class="stat-label">Post kaydetmek için</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">%100</div>
+        <div class="stat-label">Yerel, sunucusuz</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">₺0</div>
+        <div class="stat-label">Başlangıç ücreti</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how">
+    <div class="section-tag"><span>Nasıl Çalışır</span></div>
+    <h2>3 adımda hazırsın</h2>
+    <p class="section-sub">Teknik bilgi gerekmez. Yükle, tıkla, kaydet.</p>
+    <div class="steps">
+      <div class="step-card">
+        <div class="step-num">1</div>
+        <h3>Chrome'a Ekle</h3>
+        <p>Chrome Web Store'dan ücretsiz yükle. 30 saniye sürer, kayıt açmadan kullanmaya başlarsın.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">2</div>
+        <h3>LinkedIn'e Gir</h3>
+        <p>Akışında her postun altında mavi bir "Kaydet" butonu belirir. Hiçbir şey yapman gerekmez.</p>
+      </div>
+      <div class="step-card">
+        <div class="step-num">3</div>
+        <h3>Tıkla & Sakla</h3>
+        <p>Beğendiğin posta "Kaydet" de. Popup'tan tüm kayıtlarını gör, etiketle, ara, geri dön.</p>
+      </div>
     </div>
   </section>
 
   <!-- FEATURES -->
-  <section class="section" id="features">
-    <div class="section-label">Özellikler</div>
-    <h2>Neden LinkedIn Post Saver?</h2>
+  <section class="section" id="features" style="padding-top:0">
+    <div class="section-tag"><span>Özellikler</span></div>
+    <h2>İhtiyacın olan her şey</h2>
+    <p class="section-sub">Sade ama güçlü. Gereksiz hiçbir şey yok.</p>
     <div class="features-grid">
       <div class="feature-card">
-        <div class="feature-icon" style="background:rgba(0,119,181,0.12)">🔖</div>
+        <span class="feature-icon">🔖</span>
         <h3>Tek Tıkla Kaydet</h3>
-        <p>Her postun altında "Kaydet" butonu belirir. Tıkla, kaydedilsin. Kadar basit.</p>
+        <p>Her postun altında otomatik çıkan butonla anında kaydet. Sayfa yenilemene gerek yok.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon" style="background:rgba(167,139,250,0.12)">🏷️</div>
-        <h3>Etiketle & Organize Et</h3>
-        <p>Postlara istediğin etiketleri ekle. "pazarlama", "liderlik", "motivasyon" gibi.</p>
+        <span class="feature-icon">🏷️</span>
+        <h3>Etiketle</h3>
+        <p>"pazarlama", "liderlik", "teknik" gibi etiketler ekle. Sonra etiketle filtrele.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon" style="background:rgba(0,212,255,0.12)">🔍</div>
+        <span class="feature-icon">🔍</span>
         <h3>Anında Ara</h3>
-        <p>Yazar adına, post metnine veya etikete göre saniyeler içinde bul.</p>
+        <p>Yazar adı, post metni veya etiket ile saniyeler içinde istediğini bul.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon" style="background:rgba(34,197,94,0.12)">📤</div>
+        <span class="feature-icon">📤</span>
         <h3>Dışa Aktar</h3>
-        <p>Kayıtlarını CSV veya JSON olarak indir. Verilerinin sahibi sensin.</p>
+        <p>Tüm kayıtlarını CSV veya JSON olarak indir. Verin her zaman senin.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon" style="background:rgba(239,68,68,0.12)">⚡</div>
-        <h3>Infinite Scroll Desteği</h3>
-        <p>Sayfa kaydırdıkça yeni postlara otomatik olarak Kaydet butonu eklenir.</p>
+        <span class="feature-icon">♾️</span>
+        <h3>Infinite Scroll</h3>
+        <p>Sayfa kaydırdıkça yeni postlara otomatik buton eklenir. Sen sadece oku.</p>
       </div>
       <div class="feature-card">
-        <div class="feature-icon" style="background:rgba(251,191,36,0.12)">🔒</div>
-        <h3>Tamamen Yerel</h3>
-        <p>Veriler yalnızca senin cihazında saklanır. Sunucuya hiçbir şey gönderilmez.</p>
+        <span class="feature-icon">🔒</span>
+        <h3>Sıfır Sunucu</h3>
+        <p>Veriler yalnızca senin tarayıcında saklanır. Bize hiçbir şey gönderilmez.</p>
       </div>
     </div>
   </section>
 
   <!-- PRICING -->
-  <section class="section" id="pricing">
-    <div class="section-label">Fiyatlandırma</div>
-    <h2>Sade ve dürüst fiyatlar</h2>
+  <section class="section" id="pricing" style="padding-top:0">
+    <div class="section-tag"><span>Fiyatlandırma</span></div>
+    <h2>Sade, dürüst fiyatlar</h2>
+    <p class="section-sub">Ücretsiz başla. Hazır olunca yükselt.</p>
     <div class="pricing-grid">
 
-      <!-- FREE -->
       <div class="pricing-card">
         <div class="plan-name">Ücretsiz</div>
-        <div class="plan-price">₺0 <span>/ sonsuza dek</span></div>
-        <div class="plan-desc">Başlamak için mükemmel</div>
+        <div class="plan-price">
+          <span class="currency">₺</span>0
+          <span class="period">/ sonsuza dek</span>
+        </div>
+        <div class="plan-desc">Denemek için mükemmel başlangıç</div>
         <ul class="plan-features">
           <li><span class="check">✓</span> 20 post kaydı</li>
           <li><span class="check">✓</span> Etiket ekleme</li>
           <li><span class="check">✓</span> Metin arama</li>
-          <li class="disabled"><span class="cross">✕</span> Sınırsız kayıt</li>
-          <li class="disabled"><span class="cross">✕</span> CSV/JSON export</li>
-          <li class="disabled"><span class="cross">✕</span> Not ekleme</li>
+          <li class="dim"><span class="cross">✕</span> Sınırsız kayıt</li>
+          <li class="dim"><span class="cross">✕</span> CSV / JSON export</li>
+          <li class="dim"><span class="cross">✕</span> Her posta not ekle</li>
         </ul>
-        <a href="https://chromewebstore.google.com" class="plan-btn free">Ücretsiz Kur</a>
+        <a href="https://chromewebstore.google.com" class="plan-btn free">Ücretsiz Başla</a>
       </div>
 
-      <!-- PREMIUM -->
       <div class="pricing-card featured">
-        <div class="popular-badge">En Popüler</div>
+        <div class="popular-badge">✦ En Popüler</div>
         <div class="plan-name">Premium</div>
-        <div class="plan-price">₺49 <span>/ ay</span></div>
+        <div class="plan-price">
+          <span class="currency">₺</span>49
+          <span class="period">/ ay</span>
+        </div>
         <div class="plan-desc">Ciddi LinkedIn kullanıcıları için</div>
         <ul class="plan-features">
           <li><span class="check">✓</span> Sınırsız post kaydı</li>
@@ -478,42 +1203,128 @@
           <li><span class="check">✓</span> Her posta not ekle</li>
           <li><span class="check">✓</span> Öncelikli destek</li>
         </ul>
-        <a href="mailto:betulgolgedar@gmail.com?subject=Premium%20Üyelik" class="plan-btn premium">Premium'a Geç →</a>
+        <a href="mailto:betulgolgedar@gmail.com?subject=LinkedIn%20Post%20Saver%20Premium%20%C3%9Cyelik" class="plan-btn premium">Premium'a Geç →</a>
       </div>
 
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section" id="reviews" style="padding-top:0">
+    <div class="section-tag"><span>Kullanıcılar Ne Diyor</span></div>
+    <h2>Gerçek insanlar, gerçek yorumlar</h2>
+    <p class="section-sub">İlk kullanıcılarımızdan bazı geri bildirimler.</p>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"LinkedIn'de gördüğüm harika postları hep 'sonra bakarım' diyip kaybediyordum. Artık tek tıkla kaydediyorum. Çok basit ve işlevsel."</div>
+        <div class="testimonial-author">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#0077B5,#00D4FF)">👨‍💻</div>
+          <div>
+            <div class="t-name">Emre D.</div>
+            <div class="t-role">Yazılım Geliştirici</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★★</div>
+        <div class="testimonial-text">"İş arama sürecinde faydalı postları takip etmek için kullanıyorum. Etiket özelliği harika, 'CV', 'mülakat', 'networking' diye ayırdım her şeyi."</div>
+        <div class="testimonial-author">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#A78BFA,#EC4899)">👩‍🎨</div>
+          <div>
+            <div class="t-name">Selin K.</div>
+            <div class="t-role">UX Designer</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card">
+        <div class="testimonial-stars">★★★★☆</div>
+        <div class="testimonial-text">"Verilerin yerel tutulması güvenimi kazandı. LinkedIn şifremi ya da hesabımı vermiyorum, sadece metni kaydediyor. Tam olarak istediğim bu."</div>
+        <div class="testimonial-author">
+          <div class="t-avatar" style="background:linear-gradient(135deg,#22C55E,#06B6D4)">👨‍💼</div>
+          <div>
+            <div class="t-name">Ahmet Y.</div>
+            <div class="t-role">Product Manager</div>
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
   <!-- FAQ -->
-  <section class="section" id="faq">
-    <div class="section-label">Sık Sorulan Sorular</div>
+  <section class="section" id="faq" style="padding-top:0">
+    <div class="section-tag"><span>SSS</span></div>
     <h2>Aklındaki sorular</h2>
+    <p class="section-sub">Bulamadığın soruyu bize e-posta ile sor.</p>
     <div class="faq-list">
       <div class="faq-item">
-        <h4>Verilerim nerede saklanıyor?</h4>
-        <p>Tüm veriler yalnızca kendi tarayıcında, Chrome'un yerel depolama alanında saklanır. Hiçbir sunucuya gönderilmez.</p>
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Verilerim nerede saklanıyor?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">Tüm veriler yalnızca kendi tarayıcında, Chrome'un yerel depolama alanında (chrome.storage.local) saklanır. Hiçbir sunucuya, veri tabanına ya da üçüncü tarafa gönderilmez.</div>
       </div>
       <div class="faq-item">
-        <h4>Premium ödeme nasıl yapılıyor?</h4>
-        <p>Şu an için e-posta yoluyla iletişime geçiyoruz ve manuel olarak aktif ediyoruz. Yakında otomatik ödeme sistemi eklenecek.</p>
+        <div class="faq-q" onclick="toggleFaq(this)">
+          LinkedIn hesabım güvende mi?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">Evet, tamamen güvende. Extension LinkedIn'e giriş yapmaz, şifreni görmez, hesabına müdahale etmez. Sadece akışındaki post metinlerini okur ve kaydeder.</div>
       </div>
       <div class="faq-item">
-        <h4>LinkedIn hesabım güvende mi?</h4>
-        <p>Evet. Extension LinkedIn'e login olmaz, şifreni görmez. Sadece sayfadaki post metnini okur.</p>
+        <div class="faq-q" onclick="toggleFaq(this)">
+          Premium ödeme nasıl yapılıyor?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">Şu an e-posta yoluyla iletişime geçip manuel aktif ediyoruz. E-posta gönder, 24 saat içinde dönüş yapalım. Yakında otomatik ödeme sistemi eklenecek.</div>
       </div>
       <div class="faq-item">
-        <h4>İptal etmek için ne yapmalıyım?</h4>
-        <p>İstediğin zaman e-posta ile iptal edebilirsin. Taahhüt yok, uzun sözleşme yok.</p>
+        <div class="faq-q" onclick="toggleFaq(this)">
+          "Kaydet" butonu neden görünmüyor?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">Sayfayı F5 ile yenile. Extension yüklendikten sonra LinkedIn'in kendi akışının gelmesini bekler. 2-3 saniye içinde butonlar belirir. Hâlâ gözükmüyorsa Extensions sayfasından extension'ı bir kez kapat-aç.</div>
+      </div>
+      <div class="faq-item">
+        <div class="faq-q" onclick="toggleFaq(this)">
+          İptal etmek için ne yapmalıyım?
+          <span class="faq-arrow">▼</span>
+        </div>
+        <div class="faq-a">İstediğin zaman e-posta ile iptal edebilirsin. Uzun dönemli taahhüt yok, fesih ücreti yok. Aylık ödeme, aylık iptal.</div>
       </div>
     </div>
   </section>
 
+  <!-- CTA BAND -->
+  <div class="cta-band">
+    <h2>Başlamak için doğru an</h2>
+    <p>Ücretsiz yükle, 20 post kaydet, nasıl hissettirdiğini gör. Sonra karar ver.</p>
+    <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap">
+      <a href="https://chromewebstore.google.com" class="btn-primary">Chrome'a Ücretsiz Ekle</a>
+      <a href="mailto:betulgolgedar@gmail.com?subject=LinkedIn%20Post%20Saver%20Premium" class="btn-secondary" style="color:var(--muted2)">Premium Hakkında Soru Sor</a>
+    </div>
+  </div>
+
   <!-- FOOTER -->
   <footer>
-    <p>© 2025 LinkedIn Post Saver &nbsp;·&nbsp;
+    <div class="footer-logo">
+      <div style="font-size:18px">🔖</div>
+      LinkedIn Post Saver
+    </div>
+    <div class="footer-links">
+      <a href="#features">Özellikler</a>
+      <a href="#pricing">Fiyatlar</a>
       <a href="mailto:betulgolgedar@gmail.com">İletişim</a>
-    </p>
+      <a href="https://github.com/betulgolgedar/linkedin-post-saver">GitHub</a>
+    </div>
+    <div class="footer-copy">© 2025 LinkedIn Post Saver. Tüm hakları saklıdır.</div>
   </footer>
+
+  <script>
+    function toggleFaq(el) {
+      el.parentElement.classList.toggle('open');
+    }
+  </script>
 
 </body>
 </html>
